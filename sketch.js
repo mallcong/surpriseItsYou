@@ -101,7 +101,8 @@ function draw() {
 function captureFrame(){
   let imageBase64String = cnv.elt.toDataURL();
   
-  Dropbox.save(imageBase64String, 'test',);
+    
+  Dropbox.save(imageBase64String, 'test.txt',);
  // console.log(imageBase64String);
    //let showImg = createImg(imageBase64String, "");
 
