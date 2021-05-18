@@ -7,11 +7,12 @@ var w = 640,
     h = 480;
 
 var check =true;
+var database;
 
 
 function setup() {
-//  alert("For your best experience, we ask for your permission. You can read more about our policy in our privacy policy");
- // alert("Agree?");
+ alert("For your best experience, we ask for your permission. You can read more about our policy in our privacy policy");
+alert("Agree?");
   
   
     capture = createCapture({
@@ -36,6 +37,14 @@ function setup() {
   
   startTime = millis();
 
+  
+ 
+
+   database = firebase.database();
+ var ref = database.ref('drawings');
+  ref.on('value', gotData, errData);
+  
+  
 }
 
 function draw() {
@@ -87,23 +96,54 @@ function draw() {
     //  endShape(CLOSE);
     //  scale(20);
       let elapsedTime = millis() - startTime;
-      if(elapsedTime > 2000 && check){
+      if(elapsedTime > 3000 && check){
         console.log('test');
         check = false;
         captureFrame();
       
       }
-      
+       
     }
 }
 
 
 function captureFrame(){
-  let imageBase64String = cnv.elt.toDataURL();
+ let imageBase64String = cnv.elt.toDataURL('image/png').replace(/data:image\/png;base64,/, '');
+  //let imageBase64String = cnv.elt.toDataURL();
+  var ref = database.ref('drawings');
+  var data = {
+    imageBase64String
+  }
+  var result = ref.push(data, dataSent);
+  console.log(result.key);
   
-    
-  Dropbox.save(imageBase64String, 'test.txt',);
+  function dataSent(status){
+    console.log(status);
+  }
+  
+  // let data = Data();
+  
+  
+  //let riversRef = storageRef.child("images/rivers.jpg")
+
+// 3 Upload the file to the path "images/rivers.jpg"
+
+
+ // let imageBase64String = cnv.toDataURL('image/png').replace(/data:image\/png;base64,/, '');
+  
+
+ 
+ // Dropbox.save(imageBase64String, 'test.txt',);
  // console.log(imageBase64String);
    //let showImg = createImg(imageBase64String, "");
 
+}
+
+function gotData(){
+  
+  
+}
+
+function errData(){
+  console.log(err);
 }
